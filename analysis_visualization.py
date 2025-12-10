@@ -191,4 +191,19 @@ def plot_top_ingredients_scatter(output_file: str = "ingredients_top12.png") -> 
       self.assertGreaterEqual(count_row[0], 100)
 
 
-      
+
+
+
+
+
+
+
+  def test_meals_and_locations_used_in_calculations(self) -> None:
+      load_meals()
+      load_breweries()
+
+      meal_summary = get_meal_ingredient_summary()
+      self.assertGreater(meal_summary["total_meals"], 0)
+
+      state_counts = get_brewery_counts_by_state()
+      self.assertGreater(len(state_counts), 0)
