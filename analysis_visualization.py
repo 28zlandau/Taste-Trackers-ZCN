@@ -131,9 +131,6 @@ def write_calculations_to_file(output_path: str = "results_summary.txt") -> None
 
 
 def plot_top_ingredients_scatter(output_file: str = "ingredients_top12.png") -> None:
-  """
-  Scatter plot of the top 12 ingredients by how many meals they appear in.
-  """
   counts = get_top_ingredients(12)
   if not counts:
       return
@@ -170,3 +167,28 @@ def plot_top_ingredients_scatter(output_file: str = "ingredients_top12.png") -> 
   fig.tight_layout()
   fig.savefig(output_file, bbox_inches="tight")
   plt.close(fig)
+
+
+
+
+
+
+
+
+
+
+
+
+    def test_meals_at_least_100(self) -> None:
+      for run_index in range(5):
+          load_meals()
+      connection = get_connection()
+      cursor = connection.cursor()
+      cursor.execute("SELECT COUNT(*) FROM Meals")
+      count_row = cursor.fetchone()
+      connection.close()
+      self.assertIsNotNone(count_row)
+      self.assertGreaterEqual(count_row[0], 100)
+
+
+      
