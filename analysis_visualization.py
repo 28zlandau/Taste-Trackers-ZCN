@@ -39,6 +39,9 @@ def get_top_ingredients(limit: int = 12) -> List[Tuple[str, int]]:
 
 
 
+
+
+
 def get_meal_ingredient_summary() -> Dict[str, float]:
   connection = get_connection()
   cursor = connection.cursor()
@@ -109,3 +112,61 @@ def write_calculations_to_file(output_path: str = "results_summary.txt") -> None
 
   with open(output_path, "w", encoding="utf-8") as file:
       file.writelines(lines)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def plot_top_ingredients_scatter(output_file: str = "ingredients_top12.png") -> None:
+  """
+  Scatter plot of the top 12 ingredients by how many meals they appear in.
+  """
+  counts = get_top_ingredients(12)
+  if not counts:
+      return
+
+  ingredient_names, meal_counts = zip(*counts)
+  ranks = list(range(1, len(ingredient_names) + 1))
+  fig, axis = plt.subplots(figsize=(12, 6))
+
+  axis.scatter(
+      ranks,
+      meal_counts,
+      s=80,
+      color="darkorange",
+      edgecolors="black",
+  )
+  for x_position, y_position, label in zip(ranks, meal_counts, ingredient_names):
+      axis.text(
+          x_position,
+          y_position + 0.5,
+          label,
+          ha="center",
+          va="bottom",
+          fontsize=8,
+          rotation=45,
+      )
+  axis.set_xticks(ranks)
+  axis.set_xticklabels(ranks)
+  axis.set_xlabel("Ingredient Rank (1 = most common)")
+  axis.set_ylabel("Number of Meals")
+  axis.set_title("Top 12 Ingredients in Meals by Frequency")
+  axis.grid(True, linestyle="--", alpha=0.3)
+
+  _ensure_output_folder_exists(output_file)
+  fig.tight_layout()
+  fig.savefig(output_file, bbox_inches="tight")
+  plt.close(fig)
