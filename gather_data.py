@@ -1,3 +1,12 @@
+
+
+
+
+
+
+
+
+
 def create_database() -> None:
   connection = get_connection()
   cursor = connection.cursor()
